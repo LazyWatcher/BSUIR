@@ -36,9 +36,9 @@ public:
 
     void setNaturalFraction(int intPart_, int numerator_, int denominator_);
 
-    void countIntPart(NaturalFraction& th);
+    void countIntPart();
 
-    void putAwayIntPart(NaturalFraction& th);
+    void putAwayIntPart();
 
     NaturalFraction operator +(NaturalFraction& other);
 
