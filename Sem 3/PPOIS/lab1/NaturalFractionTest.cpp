@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "C:\Users\USER\source\repos\NaturalFraction(2.0)\NaturalFraction(2.0)\NaturalFraction(2.0).h"
+#include "C:\Users\USER\source\repos\NaturalFraction\NaturalFraction\NaturalFraction.h"
 #include "string" 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
