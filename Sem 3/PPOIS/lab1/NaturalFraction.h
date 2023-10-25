@@ -2,13 +2,14 @@
 using namespace std;
 
 class NaturalFraction {
+private:
+
     int intPart; // целая часть
 
     int numerator; // числитель
 
     int denominator; // знаменатель
 
-private:
     void checkMinus();
 
     void setNumerator(int  numerator_);
