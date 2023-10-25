@@ -5,10 +5,10 @@ using namespace std;
 
 
 
-void NaturalFraction::putAwayIntPart(NaturalFraction& th) {
-    if (intPart < 0)  th.numerator *= -1;
-        th.numerator += th.intPart * th.denominator;
-        th.intPart = 0;
+void NaturalFraction::putAwayIntPart() {
+    if (intPart < 0)  numerator *= -1;
+        numerator += intPart * denominator;
+        intPart = 0;
 }
 
 void NaturalFraction::checkMinus() {
@@ -57,7 +57,7 @@ int NaturalFraction::calculateGCD(int a, int b) {
 
 void NaturalFraction::reduce() {
     checkMinus();
-    countIntPart(*this);
+    countIntPart();
 
 
     int gcd = calculateGCD(numerator, denominator);
@@ -68,14 +68,14 @@ void NaturalFraction::reduce() {
 
 }
 
-void NaturalFraction::countIntPart(NaturalFraction& th) {
-    if (th.numerator >= th.denominator) {
-        if (th.intPart < 0) {
-            th.intPart -= th.numerator / th.denominator;
+void NaturalFraction::countIntPart() {
+    if (numerator >= denominator) {
+        if (intPart < 0) {
+            intPart -= numerator / denominator;
             numerator %= denominator;
         }
         else {
-            th.intPart += th.numerator / th.denominator;
+            intPart += numerator / denominator;
             numerator %= denominator;
         }
     }
@@ -110,24 +110,24 @@ void NaturalFraction::setNaturalFraction(int intPart_, int numerator_, int denom
 }
 
 NaturalFraction NaturalFraction::operator +(NaturalFraction& other) {
-     putAwayIntPart(*this);
-    putAwayIntPart(other);
-    int newDenom = denominator * other.denominator;
-    int newNum = (numerator * other.denominator) + (other.numerator * denominator);
+    putAwayIntPart();
+    other.putAwayIntPart();
+    int newDenominator = denominator * other.denominator;
+    int newNuminator = (numerator * other.denominator) + (other.numerator * denominator);
     int newIntPart = intPart + other.intPart;
 
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
 
-    return NaturalFraction(newIntPart, newNum, newDenom);
+    return NaturalFraction(newIntPart, newNuminator, newDenominator);
 }
 
 NaturalFraction NaturalFraction::operator +(int number) {
@@ -136,23 +136,23 @@ NaturalFraction NaturalFraction::operator +(int number) {
 }
 
 NaturalFraction NaturalFraction::operator +=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
-    int newDenom = denominator * other.denominator;
-    int newNum = (numerator * other.denominator) + (other.numerator * denominator);
+    putAwayIntPart();
+    other.putAwayIntPart();
+    int newDenominator = denominator * other.denominator;
+    int newNuminator = (numerator * other.denominator) + (other.numerator * denominator);
     int newIntPart = intPart + other.intPart;
 
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
-    setNaturalFraction(newIntPart, newNum, newDenom);
+    setNaturalFraction(newIntPart, newNuminator, newDenominator);
     return *this;
 }
 
@@ -162,25 +162,25 @@ NaturalFraction NaturalFraction::operator +=(int number) {
 }
 
 NaturalFraction NaturalFraction::operator -(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
 
-    int newDenom = denominator * other.denominator;
+    int newDenominator = denominator * other.denominator;
     int newIntPart = 0;
-    int newNum = (numerator * other.denominator) - (other.numerator * denominator);
+    int newNuminator = (numerator * other.denominator) - (other.numerator * denominator);
 
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
 
-    return NaturalFraction(newIntPart, newNum, newDenom);
+    return NaturalFraction(newIntPart, newNuminator, newDenominator);
 }
 
 NaturalFraction NaturalFraction::operator -(int number) {
@@ -189,23 +189,23 @@ NaturalFraction NaturalFraction::operator -(int number) {
 }
 
 NaturalFraction NaturalFraction::operator -=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
-    int newDenom = denominator * other.denominator;
-    int newNum = (numerator * other.denominator) - (other.numerator * denominator);
+    putAwayIntPart();
+    other.putAwayIntPart();
+    int newDenominator = denominator * other.denominator;
+    int newNuminator = (numerator * other.denominator) - (other.numerator * denominator);
     int newIntPart = 0;
 
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
-    setNaturalFraction(newIntPart, newNum, newDenom);
+    setNaturalFraction(newIntPart, newNuminator, newDenominator);
 
     return *this;
 }
@@ -216,23 +216,23 @@ NaturalFraction NaturalFraction::operator -=(int number) {
 }
 
 NaturalFraction NaturalFraction::operator *(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
-    int newDenom = denominator * other.denominator;
-    int newNum = numerator * other.numerator;
+    putAwayIntPart();
+    other.putAwayIntPart();
+    int newDenominator = denominator * other.denominator;
+    int newNuminator = numerator * other.numerator;
     int newIntPart = 0;
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
 
-    return NaturalFraction(newIntPart, newNum, newDenom);
+    return NaturalFraction(newIntPart, newNuminator, newDenominator);
 }
 
 NaturalFraction NaturalFraction::operator *(int number) {
@@ -241,8 +241,8 @@ NaturalFraction NaturalFraction::operator *(int number) {
 }
 
 NaturalFraction NaturalFraction::operator *=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     denominator *= other.denominator;
     numerator *= other.numerator;
     int newIntPart = 0;
@@ -267,23 +267,23 @@ NaturalFraction NaturalFraction::operator *=(int number) {
 }
 
 NaturalFraction NaturalFraction::operator /(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
-    int newDenom = denominator * other.numerator;
-    int newNum = numerator * other.denominator;
+    putAwayIntPart();
+    other.putAwayIntPart();
+    int newDenominator = denominator * other.numerator;
+    int newNuminator = numerator * other.denominator;
     int newIntPart = 0;
-    if (abs(newNum) >= abs(newDenom)) {
+    if (abs(newNuminator) >= abs(newDenominator)) {
         if (newIntPart < 0) {
-            newIntPart -= newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart -= newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
         else {
-            newIntPart += newNum / newDenom;
-            newNum %= newDenom;
+            newIntPart += newNuminator / newDenominator;
+            newNuminator %= newDenominator;
         }
     }
 
-    return NaturalFraction(newIntPart, newNum, newDenom);
+    return NaturalFraction(newIntPart, newNuminator, newDenominator);
 }
 
 NaturalFraction NaturalFraction::operator /(int number) {
@@ -292,8 +292,8 @@ NaturalFraction NaturalFraction::operator /(int number) {
 }
 
 NaturalFraction NaturalFraction::operator /=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     numerator *= other.denominator;
     denominator *= other.numerator;
     int newIntPart = 0;
@@ -319,104 +319,104 @@ NaturalFraction NaturalFraction::operator /=(int number) {
 }
 
 NaturalFraction NaturalFraction::operator ++() {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     return *this + 1;
 }
 
 NaturalFraction NaturalFraction::operator ++(int) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction th = *this;
     *this += 1;
     return th;
 }
 
 NaturalFraction NaturalFraction::operator --() {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     return *this - 1;
 
 }
 
 NaturalFraction NaturalFraction::operator --(int) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction th = *this;
     *this -= 1;
     return th;
 }
 
 bool NaturalFraction::operator <(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) < (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator <(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this < fraction;
 }
 
 bool NaturalFraction::operator >(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) > (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator >(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this > fraction;
 }
 
 bool NaturalFraction::operator <=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) <= (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator <=(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this <= fraction;
 }
 
 bool NaturalFraction::operator >=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) >= (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator >=(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this >= fraction;
 }
 
 bool NaturalFraction::operator ==(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) == (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator ==(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this == fraction;
 }
 
 bool NaturalFraction::operator !=(NaturalFraction& other) {
-    putAwayIntPart(*this);
-    putAwayIntPart(other);
+    putAwayIntPart();
+    other.putAwayIntPart();
     return (numerator * other.denominator) != (other.numerator * denominator);
 }
 
 bool NaturalFraction::operator !=(int number) {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     NaturalFraction fraction(0, number, 1);
     return *this != fraction;
 }
 
 double NaturalFraction::toDouble() {
-    putAwayIntPart(*this);
+    putAwayIntPart();
     return static_cast<double>(numerator) / denominator;
 }
 
