@@ -82,16 +82,15 @@ void ToFloatBin(float n, int arr[]) {
 double ForFloatBin(int arr[]) {
 	arr[0] = 0;
 	int whole[8] = { 0 }, fraction[5] = { 0 };
-	int l = 0, intpart = 0;
+	int l = 4, intpart = 0;
 	double fract = 0, p =0;
 	for (int i = 12; i >= 8; i--) {
 		fraction[l] = arr[i];
-		l++;
+		l--;
 	}
-	l = 0;
 	for (int i = 7; i >= 0; i--) {
-		whole[l] = arr[i];
-		l++;
+		whole[i] = arr[i];
+		
 	}
 	intpart = ToTen(whole);
 	fract = ToFractionFromBin(fraction, 5);
@@ -199,7 +198,7 @@ void Addition(int arr[], int arr2[], int arr3[]) {
 
 void AdditionMantissa(int arr[], int arr2[], int arr3[]) {
 	int p = 0, f = 0;
-	for (int i = 22; i >= 0; i--) {
+	for (int i = 23; i >= 0; i--) {
 		f = arr[i] + arr2[i] + p;
 		arr3[i] = abs(f) % 2;
 		p = f / 2;
@@ -483,7 +482,7 @@ void To32bit(int arr[], int arr32[]) {
 void bit32Addition(int arr[], int arr2[], int arr3[]) {
 	int a = 0;
 	bool first = false;
-	int temp[8] = {0}, temp2[8] = {0}, mantisa[23] = {0}, mantisa2[23] = {0}, mantisa3[23] = { 0 };
+	int temp[8] = {0}, temp2[8] = {0}, temp3[8] = { 0 }, mantisa[24] = {0}, mantisa2[24] = {0}, mantisa3[24] = { 0 }, one[8] = {0,0,0,0,0,0,0,1};
 	for (int i = 1; i < 9; i++) {
 		temp[a] = arr[i];
 		a++;
@@ -493,58 +492,74 @@ void bit32Addition(int arr[], int arr2[], int arr3[]) {
 		temp2[a] = arr2[i];
 		a++;
 	}
-	a = 0;
+	a = 1;
+	mantisa[0] = 1;
 	for (int i = 9; i < 32; i++) {
 		mantisa[a] = arr[i];
 		a++;
 	}
-	a = 0;
+	a = 1;
+	mantisa2[0] = 1;
 	for (int i = 9; i < 32; i++) {
 		mantisa2[a] = arr2[i];
 		a++;
 	}
-	a = 0;
+	a = 1;
 	int exp = ToTenExp(temp);
 	int exp2 = ToTenExp(temp2);
 	int diff = abs(exp2 - exp);
 	if (exp > exp2) {
 		for (int i = 0; i < diff; i++) {
-			if (first == false) {RightShift(mantisa2, 23, true); first = true;}
-			else RightShift(mantisa2, 23, false);
+		 RightShift(mantisa2, 24, false);
 		}
 
 		AdditionMantissa(mantisa, mantisa2, mantisa3);
+		if (mantisa3[0] == 0) { Addition(temp, one, temp3); 
+		RightShift(mantisa3, 24, false);
+		}
 		for (int i = 9; i < 32; i++) {
 			arr3[i] = mantisa3[a];
 			a++;
 		}
 		a = 0;
 		for (int i = 1; i < 9; i++) {
-			arr3[i] = temp[a];
+			arr3[i] = temp3[a];
 			a++;
 		}
-		a = 0;
+		a = 1;
 	}
 	first = false;
 	if (exp2 > exp) {
 		for (int i = 0; i < diff; i++) {
-			if (first == false) { RightShift(mantisa, 23, true); first = true; }
-			if (first == true) RightShift(mantisa, 23, false);
+			RightShift(mantisa, 24, false);
 		}
 		AdditionMantissa(mantisa2, mantisa, mantisa3);
-		for (int i = 9; i < 32; i++) {
-			arr3[i] = mantisa3[a];
-			a++;
+		if (mantisa3[0] == 0) {
+			Addition(temp2, one, temp3);
+			for (int i = 0; i < 8; i++) {
+				temp2[i] = temp3[a];
+
+			}
+			for (int i = 1; i < 9; i++) {
+				arr3[i] = temp2[a];
+				a++;
+			}
+
 		}
 		a = 0;
-		for (int i = 1; i < 9; i++) {
-			arr3[i] = temp2[a];
-			a++;
-		}
-		a = 0;
+			for (int i = 9; i < 32; i++) {
+				arr3[i] = mantisa3[a];
+				a++;
+			}
+			a = 0;
+			for (int i = 1; i < 9; i++) {
+				arr3[i] = temp3[a];
+				a++;
+			}
+
+		
+
 	}
-
-
 }
 
 
